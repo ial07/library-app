@@ -1,6 +1,7 @@
 import type { Pagination } from ".";
 import type { Author } from "./Author";
 import type { Category } from "./Category";
+import type { Review } from "./Review";
 
 export interface Book {
   id: string;
@@ -22,7 +23,8 @@ export interface Book {
   borrowCount: number;
   totalCopies: number;
   Author:Author,
-  Category:Category
+  Category:Category,
+  Review:Review[]
 }
 
 export interface BookListResponse {

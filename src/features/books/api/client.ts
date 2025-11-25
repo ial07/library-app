@@ -1,6 +1,6 @@
 import { apiInstance } from "@/api/client"
 import type { ApiResponse } from "@/types"
-import type { BookListResponse } from "@/types/Book"
+import type { Book, BookListResponse } from "@/types/Book"
 import type { AxiosError } from "axios"
 
 // Get Books
@@ -20,6 +20,22 @@ export async function getBooks(
     const { data } = await apiInstance.get<ApiResponse<BookListResponse>>("/books", {
       params,
     });
+
+    return data
+  } catch (error) {
+    const err = error as AxiosError<ApiResponse<null>>
+    throw err.response?.data
+  }
+}
+
+
+// Get Book By ID
+export async function getBookById(
+    id: string,
+): Promise<ApiResponse<Book>> {
+  try {
+
+    const { data } = await apiInstance.get<ApiResponse<Book>>(`/books/${id}`);
 
     return data
   } catch (error) {

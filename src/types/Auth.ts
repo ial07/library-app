@@ -1,9 +1,9 @@
 export type User = {
     id: string;
     name: string;
-    email: string;
-    phoneNumber:string;
-    role:"USER"|"ADMIN"
+    email?: string;
+    phoneNumber?:string;
+    role?:"USER"|"ADMIN"
   }
 
 export interface LoginPayload {

@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 type CardBookProps = {
+  id: string;
   image: string;
   label: string;
   description: string;
@@ -8,13 +10,17 @@ type CardBookProps = {
 };
 
 const CardBook: React.FC<CardBookProps> = ({
+  id,
   description,
   label,
   rating,
   image,
 }) => {
   return (
-    <div className="rounded-xl shadow-md overflow-hidden">
+    <Link
+      to={`/details/${id}`}
+      className="rounded-xl shadow-md overflow-hidden cursor-pointer"
+    >
       <img
         src={image}
         alt={label}
@@ -33,7 +39,7 @@ const CardBook: React.FC<CardBookProps> = ({
           <span className="text-sm-semibold md:text-md-semibold">{rating}</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

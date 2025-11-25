@@ -29,8 +29,6 @@ const HomePage: React.FC = () => {
     isError: isErrorAuthor,
   } = useAuthor();
 
-  console.log(listAuthor?.authors);
-
   return (
     <div>
       <Carousel className="mb-6 md:mb-12">
@@ -82,6 +80,7 @@ const HomePage: React.FC = () => {
         error={error}
         isError={isError}
         isLoading={isLoading}
+        page={page}
         setPage={setPage}
       />
 

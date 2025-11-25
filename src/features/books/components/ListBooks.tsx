@@ -3,13 +3,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import CardBook from "./CardBook";
 import { Button } from "@/components/ui/button";
 import type { BookListResponse } from "@/types/Book";
+import { cn } from "@/lib/utils";
 
 type ListBooksProps = {
   listBooks: BookListResponse | undefined;
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
+  page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  className?: string;
 };
 
 const ListBooks: React.FC<ListBooksProps> = ({
@@ -17,7 +20,9 @@ const ListBooks: React.FC<ListBooksProps> = ({
   error,
   isError,
   isLoading,
+  page,
   setPage,
+  className,
 }) => {
   if (isError) return <div className="p-10 text-red-500">{error?.message}</div>;
 
@@ -25,7 +30,7 @@ const ListBooks: React.FC<ListBooksProps> = ({
   const totalPages: number = listBooks?.pagination.totalPages ?? 0;
 
   return (
-    <div className="flex-center flex-col">
+    <div className={cn("flex-center flex-col", className)}>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5 mb-5 md:mb-10 ">
         {isLoading ? (
           <>
@@ -37,6 +42,7 @@ const ListBooks: React.FC<ListBooksProps> = ({
           books.map((b) => (
             <CardBook
               key={b.id}
+              id={b.id}
               image={b.coverImage}
               label={b.title}
               description={b.description}
@@ -47,7 +53,7 @@ const ListBooks: React.FC<ListBooksProps> = ({
           <div>No Products Yet</div>
         )}
       </div>
-      {totalPages > 1 && (
+      {totalPages > 1 && page < totalPages && (
         <Button
           onClick={() => setPage((prev) => prev + 1)}
           disabled={isLoading}
