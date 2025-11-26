@@ -4,3 +4,7 @@ export interface Category {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface ListCategories{
+    categories: Category[]
+}

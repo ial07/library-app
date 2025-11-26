@@ -24,7 +24,7 @@ const CardBook: React.FC<CardBookProps> = ({
       <img
         src={image}
         alt={label}
-        className="object-cover"
+        className="object-cover w-full"
         style={{ height: "clamp(16.13rem, 32.81vw, 21.00rem)" }}
       />
       <div className="p-4">

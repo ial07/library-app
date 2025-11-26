@@ -7,8 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
@@ -25,10 +23,10 @@ const Header: React.FC = () => {
           {!token ? (
             <>
               <Button className="w-41" variant={"secondary"} asChild>
-                <Link to="/?type=login">Login</Link>
+                <Link to="/auth?type=login">Login</Link>
               </Button>
               <Button className="w-41" asChild>
-                <Link to="/?type=register">Register</Link>
+                <Link to="/auth?type=register">Register</Link>
               </Button>
             </>
           ) : (

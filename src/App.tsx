@@ -6,13 +6,14 @@ import MainLayout from "./components/layout/MainLayout";
 import HomePage from "./pages/Home/HomePage";
 import PublicRoute from "./routes/PublicRoute";
 import DetailPage from "./pages/Details/DetailPage";
+import CategoryPage from "./pages/Category/CategoryPage";
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route
-          path="/"
+          path="/auth"
           element={
             <PublicRoute>
               <AuthPage />
@@ -21,8 +22,9 @@ const App: React.FC = () => {
         />
 
         <Route element={<MainLayout />}>
-          <Route path="home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/details/:id" element={<DetailPage />} />
+          <Route path="/category" element={<CategoryPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" />} />
