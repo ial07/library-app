@@ -1,36 +1,39 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { CartItem } from '../../types/Cart';
+// cartSlice.ts
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { CartItem } from "../../types/Cart";
+import { loadCart, saveCart } from "@/lib/localstorage";
 
 interface CartState {
   items: CartItem[];
-  filter: string; // State untuk filter keranjang (contoh)
+  filter: string;
 }
 
 const initialState: CartState = {
-  items: [],
-  filter: 'all',
+  items: loadCart(),
+  filter: "all",
 };
 
-export const cartSlice = createSlice({
-  name: 'cart',
+const cartSlice = createSlice({
+  name: "cart",
   initialState,
   reducers: {
-    addItem: (state, action: PayloadAction<CartItem>) => {
-      const existingItem = state.items.find(item => item.id === action.payload.id);
-      if (existingItem) {
-        existingItem.quantity += action.payload.quantity;
-      } else {
+    addToCart: (state, action: PayloadAction<CartItem>) => {
+      const exist = state.items.find((b) => b.id === action.payload.id);
+      if (!exist) {
         state.items.push(action.payload);
+        saveCart(state.items);
       }
     },
-    removeItem: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter(item => item.id !== action.payload);
+    removeFromCart: (state, action: PayloadAction<string>) => {
+      state.items = state.items.filter((b) => b.id !== action.payload);
+      saveCart(state.items);
     },
-    updateFilter: (state, action: PayloadAction<string>) => {
-      state.filter = action.payload; // Digunakan untuk filter cart
-    }
+    clearCart: (state) => {
+      state.items = [];
+      saveCart([]);
+    },
   },
 });
 
-export const { addItem, removeItem, updateFilter } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

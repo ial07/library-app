@@ -23,8 +23,8 @@ const DetailPage: React.FC = () => {
       {!isLoading && (
         <DetailBook
           id={data?.id}
-          author={data?.Author.name}
-          category={data?.Category.name}
+          author={data?.Author}
+          category={data?.Category}
           description={data?.description}
           image={data?.coverImage}
           pageCount={data?.totalCopies}

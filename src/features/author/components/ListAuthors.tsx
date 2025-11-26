@@ -1,6 +1,7 @@
 import type { ListAuthorResponse } from "@/types/Author";
 import React from "react";
 import CardAuthor from "./CardAuthor";
+import { Link } from "react-router-dom";
 
 type ListAuthorsProps = {
   datalistAuthors: ListAuthorResponse | undefined;
@@ -22,7 +23,9 @@ const ListAuthors: React.FC<ListAuthorsProps> = ({
       {datalistAuthors &&
         datalistAuthors.authors.length > 0 &&
         datalistAuthors.authors.map((a) => (
-          <CardAuthor name={a.name} qty={5} />
+          <Link to={`/bookbyauthor/${a.id}`}>
+            <CardAuthor name={a.name} qty={5} />
+          </Link>
         ))}
     </div>
   );

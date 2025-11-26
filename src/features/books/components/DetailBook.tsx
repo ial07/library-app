@@ -1,17 +1,21 @@
 import { Button } from "@/components/ui/button";
+import { addToCart } from "@/features/cart/cartSlice";
 import { formatDate } from "@/lib/utils";
+import type { Author } from "@/types/Author";
+import type { Category } from "@/types/Category";
 import type { Review } from "@/types/Review";
 import { Icon } from "@iconify/react";
 import { ChevronRight } from "lucide-react";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 type DetailBookProps = {
   id?: string;
   image?: string;
-  category?: string;
+  category?: Category;
   title?: string;
-  author?: string;
+  author?: Author;
   description?: string;
   rating?: number;
   pageCount?: number;
@@ -21,6 +25,7 @@ type DetailBookProps = {
 };
 
 const DetailBook: React.FC<DetailBookProps> = ({
+  id,
   description,
   author,
   availableCopies,
@@ -32,6 +37,7 @@ const DetailBook: React.FC<DetailBookProps> = ({
   title,
   Review,
 }) => {
+  const dispatch = useDispatch();
   return (
     <div className="relative">
       <div className="flex-start mb-4 md:mb-6">
@@ -47,18 +53,18 @@ const DetailBook: React.FC<DetailBookProps> = ({
       </div>
 
       <div className="flex items-center flex-col md:flex-row gap-9">
-        <div className="h-[-webkit-fill-available] md:flex-[2.6] basis-80 p-2 bg-[#E9EAEB]">
+        <div className="h-full md:flex-[2.6] basis-80 p-2 bg-[#E9EAEB]">
           <img src={image} className="object-cover h-full w-full" />
         </div>
 
-        <div className="h-full md:flex-[7.4] basis-80">
+        <div className="h-full w-full md:flex-[7.4] basis-80">
           <div className="mb-3 md:mb-5.5">
             <div className="text-sm-bold px-2 rounded-sm border border-neutral-300 mb-1 w-fit">
-              {category}
+              {category?.name}
             </div>
             <h2 className="display-xs-bold md:display-sm-bold mb-1">{title}</h2>
             <h3 className="text-sm-semibold md:text-md-semibold mb-1">
-              {author}
+              {author?.name}
             </h3>
             <div className="flex-start gap-1">
               <img src="/icons/star.svg" alt="star" />
@@ -99,12 +105,27 @@ const DetailBook: React.FC<DetailBookProps> = ({
             {description}
           </p>
 
-          <div className="flex-start gap-3">
-            <Button variant={"secondary"} className="hidden md:inline w-50">
+          <div className="md:flex! justify-start gap-3 hidden!">
+            <Button
+              variant={"secondary"}
+              className="w-50"
+              onClick={() =>
+                dispatch(
+                  addToCart({
+                    id: id!,
+                    title: title!,
+                    Author: author!,
+                    coverImage: image!,
+                    Category:category!,
+                    quantity:1
+                  })
+                )
+              }
+            >
               Add to Cart
             </Button>
-            <Button className="hidden md:inline w-50">Borrow Book</Button>
-            <div className="size-10 rounded-full border border-neutral-300 hidden md:inline flex-center">
+            <Button className="w-50">Borrow Book</Button>
+            <div className="size-10 rounded-full border border-neutral-300 md:inline flex-center">
               <Icon icon="tabler:share" width="24" height="24" />
             </div>
           </div>
@@ -153,7 +174,7 @@ const DetailBook: React.FC<DetailBookProps> = ({
             </div>
           ))}
       </div>
-      <div className="flex-start gap-3 fixed bottom-0 left-0 bg-white p-4 w-full">
+      <div className="flex-start gap-3 fixed bottom-0 left-0 bg-white p-4 w-full md:hidden!">
         <Button variant={"secondary"} className="flex-1">
           Add to Cart
         </Button>

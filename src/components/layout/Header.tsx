@@ -13,6 +13,7 @@ import { ChevronDown } from "lucide-react";
 
 const Header: React.FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
+  const items = useSelector((state: RootState) => state.cart.items);
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/90 backdrop-blur-sm">
       <nav className="custom-container mx-auto flex h-16 md:h-20 items-center justify-between ">
@@ -31,12 +32,16 @@ const Header: React.FC = () => {
             </>
           ) : (
             <>
-              <div className="py-2 pr-2 relative cursor-pointer">
-                <div className="absolute size-5 flex-center text-white bg-danger rounded-full right-0">
-                  1
+              <Link to="/cart">
+                <div className="py-2 pr-2 relative cursor-pointer">
+                  {items.length > 0 && (
+                    <div className="absolute size-5 flex-center text-white bg-danger rounded-full right-0">
+                      {items.length}
+                    </div>
+                  )}
+                  <img src="/icons/Bag.svg" alt="bag" />
                 </div>
-                <img src="/icons/Bag.svg" alt="bag" />
-              </div>
+              </Link>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

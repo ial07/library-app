@@ -7,6 +7,8 @@ import HomePage from "./pages/Home/HomePage";
 import PublicRoute from "./routes/PublicRoute";
 import DetailPage from "./pages/Details/DetailPage";
 import CategoryPage from "./pages/Category/CategoryPage";
+import BookByAuthorPage from "./pages/BookByAuthor/BookByAuthorPage";
+import CartPage from "./pages/Cart/CartPage";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +27,8 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/details/:id" element={<DetailPage />} />
           <Route path="/category" element={<CategoryPage />} />
+          <Route path="/bookbyauthor/:id" element={<BookByAuthorPage />} />
+          <Route path="/cart" element={<CartPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" />} />

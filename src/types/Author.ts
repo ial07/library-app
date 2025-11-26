@@ -8,13 +8,11 @@ export interface Author {
   updatedAt: string;
 }
 
-
 export interface ListAuthorResponse {
-    authors: Author[];
+  authors: Author[];
 }
 
-
 export interface ListBooksAuthorResponse {
-    author: Author;
-    books?: Book[];
+  author: Author;
+  books?: Book[];
 }
