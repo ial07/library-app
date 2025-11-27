@@ -1,7 +1,7 @@
 // cartSlice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { CartItem } from "../../types/Cart";
-import { loadCart, saveCart } from "@/lib/localstorage";
+import { loadCart, saveCart } from "@/lib/localStorage";
 
 interface CartState {
   items: CartItem[];

@@ -58,10 +58,37 @@ const Header: React.FC = () => {
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Borrowed List</DropdownMenuItem>
-                  <DropdownMenuItem>Reviews</DropdownMenuItem>
-                  <DropdownMenuItem className="text-danger">
+                  <DropdownMenuItem asChild>
+                    <Link
+                      className="cursor-pointer"
+                      to="/settings?type=profile"
+                    >
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link
+                      className="cursor-pointer"
+                      to="/settings?type=borrowed"
+                    >
+                      Borrowed List
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link
+                      className="cursor-pointer"
+                      to="/settings?type=reviews"
+                    >
+                      Reviews
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    className="text-danger"
+                    // onClick={handleLogout}
+                  >
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>

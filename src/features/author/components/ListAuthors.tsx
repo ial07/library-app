@@ -23,7 +23,7 @@ const ListAuthors: React.FC<ListAuthorsProps> = ({
       {datalistAuthors &&
         datalistAuthors.authors.length > 0 &&
         datalistAuthors.authors.map((a) => (
-          <Link to={`/bookbyauthor/${a.id}`}>
+          <Link to={`/bookbyauthor/${a.id}`} key={a.id}>
             <CardAuthor name={a.name} qty={5} />
           </Link>
         ))}

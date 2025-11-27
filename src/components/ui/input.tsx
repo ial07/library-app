@@ -15,7 +15,7 @@ function Input({ label, error, id, type, className, ...props }: InputProps) {
   return (
     <div className="space-y-1 mb-3">
       {label && (
-        <Label htmlFor={id} className="font-bold">
+        <Label htmlFor={id} className="font-bold mb-1">
           {label}
         </Label>
       )}
@@ -25,7 +25,7 @@ function Input({ label, error, id, type, className, ...props }: InputProps) {
           id={id}
           type={isPassword && show ? "text" : type}
           className={cn(
-            "placeholder:text-muted-foreground border-input h-12 w-full rounded-lg border bg-transparent px-4 py-2 text-sm-semibold md:text-md-semibold outline-none",
+            "placeholder:text-muted-foreground border-input h-12 w-full rounded-lg border bg-transparent px-4 py-2 text-sm-semibold md:text-md-semibold outline-none read-only:bg-neutral-100",
             error && "border border-[#EE1D52]",
             className
           )}
