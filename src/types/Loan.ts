@@ -1,3 +1,4 @@
+import type { Pagination } from ".";
 import type { Book } from "./Book";
 
 export interface Loan {
@@ -13,7 +14,8 @@ export interface Loan {
 
 
 export interface LoansResponse {
-    loans : Loan[]
+    loans : Loan[],
+    pagination: Pagination
 }
 
 export interface LoanPayload {

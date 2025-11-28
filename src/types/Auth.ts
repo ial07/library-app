@@ -1,10 +1,5 @@
-export type User = {
-    id: string;
-    name: string;
-    email?: string;
-    phoneNumber?:string;
-    role?:"USER"|"ADMIN"
-  }
+import type { User } from "./Profile";
+
 
 export interface LoginPayload {
   email: string;

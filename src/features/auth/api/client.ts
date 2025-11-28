@@ -3,9 +3,9 @@ import type { ApiResponse } from '@/types'
 import type {
   LoginPayload,
   AuthState,
-  registerPayload,
-  User
+  registerPayload
 } from '@/types/Auth'
+import type { User } from '@/types/Profile'
 import type { AxiosError } from 'axios'
 
 // POST Login

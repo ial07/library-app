@@ -7,8 +7,9 @@ import {
   login,
   register
 } from "../api/client";
-import type { LoginPayload, AuthState, registerPayload, User } from "@/types/Auth";
+import type { LoginPayload, AuthState, registerPayload } from "@/types/Auth";
 import { type ApiResponse } from "@/types";
+import type { User } from "@/types/Profile";
 
 export const useAuth = () => {
   const dispatch = useDispatch();

@@ -1,7 +1,8 @@
 // src/features/auth/authSlice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/redux/store";
-import type { AuthState, User } from "@/types/Auth";
+import type { AuthState } from "@/types/Auth";
+import type { User } from "@/types/Profile";
 
 
 

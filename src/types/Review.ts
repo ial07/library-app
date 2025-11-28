@@ -1,4 +1,6 @@
-import type { User } from "./Auth";
+import type { Pagination } from ".";
+import type { Book } from "./Book";
+import type { User } from "./Profile";
 
 export interface Review {
     id:number;
@@ -7,5 +9,25 @@ export interface Review {
     userId:number;
     bookId:number;
     createdAt:string;
-    User:User
+    User:User;
+    Book:Book
+}
+
+export interface ReviewListResponse {
+    reviews: Review[];
+    pagination: Pagination
+}
+
+export interface ReviewResponse {
+    review: Review;
+    bookStats: {
+        rating:number;
+        reviewCount:number;
+    }
+}
+
+export interface ReviewPayload {
+    bookId:number;
+    star : number;
+    comment:string;
 }

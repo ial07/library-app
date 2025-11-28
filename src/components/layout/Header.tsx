@@ -22,14 +22,14 @@ const Header: React.FC = () => {
         </Link>
         <div className="flex items-center gap-4">
           {!token ? (
-            <>
+            <div className="items-center gap-4 hidden md:flex">
               <Button className="w-41" variant={"secondary"} asChild>
                 <Link to="/auth?type=login">Login</Link>
               </Button>
               <Button className="w-41" asChild>
                 <Link to="/auth?type=register">Register</Link>
               </Button>
-            </>
+            </div>
           ) : (
             <>
               <Link to="/cart">
