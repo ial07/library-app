@@ -9,6 +9,7 @@ import ListBooks from "@/features/books/components/ListBooks";
 import { useBooks } from "@/features/books/hooks/useBooks";
 import { useAuthor } from "@/features/author/hooks/useAuthor";
 import ListAuthors from "@/features/author/components/ListAuthors";
+import { CategoryContants } from "@/constants/category-constant";
 
 const HomePage: React.FC = () => {
   const [page, setPage] = useState<number>(1);
@@ -33,11 +34,11 @@ const HomePage: React.FC = () => {
     <div>
       <Carousel className="mb-6 md:mb-12">
         <CarouselContent>
-          <CarouselItem className="relative">
+          <CarouselItem className="relative max-h-110">
             <img
               src="/images/carousel-1.png"
               alt="carousel"
-              className="w-full"
+              className="w-full max-h-110 object-cover"
             />
             <img
               src="/images/text-hero.png"
@@ -47,28 +48,25 @@ const HomePage: React.FC = () => {
           </CarouselItem>
           <CarouselItem>
             <img
-              src="/images/carousel-1.png"
+              src="/images/carousel-2.jpg"
               alt="carousel"
-              className="w-full"
+              className="w-full max-h-110 object-cover"
             />
           </CarouselItem>
           <CarouselItem>
             <img
-              src="/images/carousel-1.png"
+              src="/images/carousel-3.jpg"
               alt="carousel"
-              className="w-full"
+              className="w-full max-h-110 object-cover"
             />
           </CarouselItem>
         </CarouselContent>
       </Carousel>
 
       <div className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4 mb-6 md:mb-12">
-        <CardCategory label="Fiction" />
-        <CardCategory label="Fiction" />
-        <CardCategory label="Fiction" />
-        <CardCategory label="Fiction" />
-        <CardCategory label="Fiction" />
-        <CardCategory label="Fiction" />
+        {CategoryContants.map((cc) => (
+          <CardCategory label={cc.label} image={cc.image} key={cc.label} />
+        ))}
       </div>
 
       <h2 className="display-xs-bold md:display-lg-bold mb-5 md:mb-10">

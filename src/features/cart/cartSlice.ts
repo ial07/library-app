@@ -24,8 +24,10 @@ const cartSlice = createSlice({
         saveCart(state.items);
       }
     },
-    removeFromCart: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter((b) => b.id !== action.payload);
+    removeFromCart: (state, action: PayloadAction<string | number>) => {
+      state.items = state.items.filter(
+        (b) => String(b.id) !== String(action.payload)
+      );
       saveCart(state.items);
     },
     clearCart: (state) => {

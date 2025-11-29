@@ -35,7 +35,7 @@ const App: React.FC = () => {
           <Route path="/bookbyauthor/:id" element={<BookByAuthorPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/success" element={<SuccessAlertPage />} />
+          <Route path="/success" element={<SuccessAlertPage returnDate="" />} />
           <Route path="/settings" element={<SettingPage />} />
         </Route>
 

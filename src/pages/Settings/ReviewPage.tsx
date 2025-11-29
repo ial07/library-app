@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/utils";
 import dayjs from "dayjs";
 import { Search } from "lucide-react";
 import React from "react";
+import { motion } from "framer-motion";
 
 const ReviewPage: React.FC = () => {
   const { data, isLoading, isError, error } = useMeReview();
@@ -23,9 +24,17 @@ const ReviewPage: React.FC = () => {
         <span>No Data Found</span>
       ) : (
         data?.reviews.map((r) => (
-          <div
-            className="p-4 md:p-5 rounded-2xl bg-white shadow-sm border w-full md:w-[700px] lg:w-[1000px] mb-4"
+          <motion.div
             key={r.id}
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            whileHover={{
+              scale: 1.02,
+              boxShadow: "0 0 15px rgba(0, 255, 255, 0.4)",
+              borderColor: "rgba(0,255,255,0.6)",
+            }}
+            transition={{ type: "spring", damping: 10, stiffness: 200 }}
+            className="p-4 md:p-5 rounded-2xl bg-white shadow-sm border w-full md:w-[700px] lg:w-[1000px] mb-4"
           >
             <div className="flex-start">
               <span className="text-sm-semibold md:text-md-semibold">
@@ -66,7 +75,7 @@ const ReviewPage: React.FC = () => {
               ))}
             </div>
             <p className="text-sm-semibold md:text-md-semibold">{r.comment}</p>
-          </div>
+          </motion.div>
         ))
       )}
     </div>

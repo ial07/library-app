@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useLoan } from "@/features/checkout/hooks/useLoan";
 import { useMeLoans } from "@/features/me/hooks/useMe";
 import { useReview } from "@/features/review/hooks/useReview";
 import { cn } from "@/lib/utils";
@@ -17,6 +18,8 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import dayjs from "dayjs";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const BorrowPage: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -29,6 +32,7 @@ const BorrowPage: React.FC = () => {
 
   const { data, isLoading, isError, error } = useMeLoans(status, page, 10);
   const { reviewMutation } = useReview();
+  const { putLoanMutation, errorMessage } = useLoan();
 
   if (isError) return <span>{error.message}</span>;
 
@@ -43,17 +47,29 @@ const BorrowPage: React.FC = () => {
   };
 
   // Give Review
-  const handleSend = (bookId: number) => {
-    reviewMutation.mutate(
-      { bookId, star: rating, comment },
-      {
-        onSuccess: () => {
-          (
-            document.querySelector("[data-dialog-close]") as HTMLButtonElement
-          )?.click();
-        },
-      }
-    );
+  const handleSend = async (bookId: number) => {
+    try {
+      // kirim review
+      const resReview = await reviewMutation.mutateAsync({
+        bookId,
+        star: rating,
+        comment,
+      });
+
+      // update loan
+      const resLoan = await putLoanMutation.mutateAsync(String(bookId));
+
+      // tutup dialog
+      (
+        document.querySelector("[data-dialog-close]") as HTMLButtonElement
+      )?.click();
+
+      toast.success(resLoan.message);
+      window.location.href = "/settings?type=reviews";
+    } catch (err: any) {
+      const msg = err?.message || "Gagal memproses";
+      toast.error(msg);
+    }
   };
 
   return (
@@ -86,7 +102,18 @@ const BorrowPage: React.FC = () => {
         <div>Data Empty</div>
       ) : (
         data?.loans.map((loan) => (
-          <div className="p-4 md:p-5 rounded-2xl bg-white shadow-sm border w-full md:w-[700px] lg:w-[1000px] mb-4">
+          <motion.div
+            key={loan.id}
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            whileHover={{
+              scale: 1.02,
+              boxShadow: "0 0 15px rgba(0, 255, 255, 0.4)",
+              borderColor: "rgba(0,255,255,0.6)",
+            }}
+            transition={{ type: "spring", damping: 10, stiffness: 200 }}
+            className="p-4 md:p-5 rounded-2xl bg-white shadow-sm border w-full md:w-[700px] lg:w-[1000px] mb-4"
+          >
             <div className="flex-between">
               <div className="flex-start items-center">
                 <div className="text-sm-bold md:text-md-bold me-1 md:me-3">
@@ -110,7 +137,7 @@ const BorrowPage: React.FC = () => {
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
               <div className="flex-start gap-4">
                 <img
-                  src="/images/carousel-1.png"
+                  src={loan.Book.coverImage}
                   alt="book"
                   className="h-34.5 w-23 object-cover"
                 />
@@ -140,7 +167,7 @@ const BorrowPage: React.FC = () => {
                         Give Review
                       </h2>
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription asChild>
                       <div className="flex-center flex-col">
                         <div className="text-sm-bold md:text-md-extrabold mb-2">
                           Give Rating
@@ -168,7 +195,7 @@ const BorrowPage: React.FC = () => {
                 </DialogContent>
               </Dialog>
             </div>
-          </div>
+          </motion.div>
         ))
       )}
       {canNext && (

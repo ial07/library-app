@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import CardBook from "./CardBook";
 import { Button } from "@/components/ui/button";
-import type { BookListResponse } from "@/types/Book";
+import type { Book, BookListResponse } from "@/types/Book";
 import { cn } from "@/lib/utils";
 
 type ListBooksProps = {
@@ -24,22 +24,30 @@ const ListBooks: React.FC<ListBooksProps> = ({
   setPage,
   className,
 }) => {
-  if (isError) return <div className="p-10 text-red-500">{error?.message}</div>;
+  const [allBooks, setAllBooks] = useState<Book[]>([]);
 
-  const books = listBooks?.books ?? [];
-  const totalPages: number = listBooks?.pagination.totalPages ?? 0;
+  useEffect(() => {
+    if (!listBooks?.books) return;
+
+    setAllBooks((prev) => {
+      if (page === 1) return listBooks.books;
+      return [...prev, ...listBooks.books];
+    });
+  }, [listBooks?.books]); // hanya jalan jika data berubah
+
+  if (isError) return <div>{error?.message}</div>;
+
+  const totalPages = listBooks?.pagination.totalPages ?? 0;
 
   return (
     <div className={cn("flex-center flex-col", className)}>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5 mb-5 md:mb-10 ">
-        {isLoading ? (
-          <>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-100 w-full rounded-lg" />
-            ))}
-          </>
-        ) : books.length > 0 ? (
-          books.map((b) => (
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5 mb-5 md:mb-10">
+        {isLoading && allBooks.length === 0 ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-100 w-full rounded-lg" />
+          ))
+        ) : allBooks.length > 0 ? (
+          allBooks.map((b) => (
             <CardBook
               key={b.id}
               id={b.id}
@@ -53,11 +61,12 @@ const ListBooks: React.FC<ListBooksProps> = ({
           <div>No Products Yet</div>
         )}
       </div>
+
       {totalPages > 1 && page < totalPages && (
         <Button
-          onClick={() => setPage((prev) => prev + 1)}
+          onClick={() => setPage((p) => p + 1)}
           disabled={isLoading}
-          variant={"secondary"}
+          variant="secondary"
           className="w-37.5 md:w-50"
         >
           {isLoading ? "Loading..." : "Load More"}

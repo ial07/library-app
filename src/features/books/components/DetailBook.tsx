@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/features/cart/cartSlice";
+import { addCheckout } from "@/features/checkout/checkoutSlice";
 import { formatDate } from "@/lib/utils";
 import type { Author } from "@/types/Author";
+import type { CartItem } from "@/types/Cart";
 import type { Category } from "@/types/Category";
 import type { Review } from "@/types/Review";
 import { Icon } from "@iconify/react";
 import { ChevronRight } from "lucide-react";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type DetailBookProps = {
   id?: string;
@@ -38,6 +40,24 @@ const DetailBook: React.FC<DetailBookProps> = ({
   Review,
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function goToCheckout() {
+    if (!id) return;
+
+    const item: CartItem = {
+      quantity: 1,
+      id,
+      title,
+      coverImage: image,
+      rating,
+      Category: category,
+      Author: author,
+    };
+
+    dispatch(addCheckout([item]));
+    navigate("/checkout");
+  }
   return (
     <div className="relative">
       <div className="flex-start mb-4 md:mb-6">
@@ -116,15 +136,17 @@ const DetailBook: React.FC<DetailBookProps> = ({
                     title: title!,
                     Author: author!,
                     coverImage: image!,
-                    Category:category!,
-                    quantity:1
+                    Category: category!,
+                    quantity: 1,
                   })
                 )
               }
             >
               Add to Cart
             </Button>
-            <Button className="w-50">Borrow Book</Button>
+            <Button className="w-50" onClick={goToCheckout}>
+              Borrow Book
+            </Button>
             <div className="size-10 rounded-full border border-neutral-300 md:inline flex-center">
               <Icon icon="tabler:share" width="24" height="24" />
             </div>
@@ -178,7 +200,9 @@ const DetailBook: React.FC<DetailBookProps> = ({
         <Button variant={"secondary"} className="flex-1">
           Add to Cart
         </Button>
-        <Button className="flex-1">Borrow Book</Button>
+        <Button className="flex-1" onClick={goToCheckout}>
+          Borrow Book
+        </Button>
         <div className="size-11 rounded-full border border-neutral-300 flex-center">
           <Icon icon="tabler:share" width="24" height="24" />
         </div>

@@ -10,11 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearCheckout } from "../checkoutSlice";
 import { useLoan } from "../hooks/useLoan";
+import { removeFromCart } from "@/features/cart/cartSlice";
+import dayjs from "dayjs";
+import { useMe } from "@/features/me/hooks/useMe";
+import { toast } from "react-toastify";
 
 const CheckoutList: React.FC = () => {
   const items = useSelector((state: RootState) => state.checkout.items);
   const [selected] = useState<string[]>(() => items.map((b) => b.id!));
-  const { loanMutation } = useLoan();
+  const { postLoanMutation, isLoading: loadingLoan } = useLoan();
+  const { data, isLoading } = useMe();
 
   const [borrowDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [duration, setDuration] = useState<number>(3);
@@ -34,37 +39,54 @@ const CheckoutList: React.FC = () => {
     const selectedItems = items.filter((b) => selected.includes(b.id!));
     const payloads = selectedItems.map((b) => ({
       bookId: Number(b.id!),
-      days: Number(duration), // duration dari radio
+      days: Number(duration),
     }));
 
     for (const p of payloads) {
-      await loanMutation.mutateAsync(p);
-    }
+      try {
+        const res = await postLoanMutation.mutateAsync(p);
 
+        // success dari API
+        toast.success(res.message);
+        dispatch(removeFromCart(String(p.bookId)));
+      } catch (err: any) {
+        // error dari API
+        toast.error(err?.message);
+        return;
+      }
+    }
     dispatch(clearCheckout());
-    navigate("/success");
+    navigate(`/success?returnDate=${returnDate}`);
   }
+
   return (
     <div className="flex-between flex-col items-start! md:flex-row gap-6 md:gap-14.5 ">
       <div className="w-full flex-[4.9] basis-80 flex-col gap-2 md:gap-4">
         <h2 className="text-lg-bold md:display-xs-bold">User Information</h2>
-        <div className="flex-between">
-          <span className="text-sm-medium md:text-md-medium">Name</span>
-          <span className="text-md-bold md:text-md-bold">Johndoe</span>
-        </div>
-        <div className="flex-between">
-          <span className="text-sm-medium md:text-md-medium">Email</span>
-          <span className="text-md-bold md:text-md-bold">
-            johndoe@email.com
-          </span>
-        </div>
-        <div className="flex-between">
-          <span className="text-sm-medium md:text-md-medium">
-            Nomor Handphone
-          </span>
-          <span className="text-md-bold md:text-md-bold">081234567890</span>
-        </div>
-
+        {!isLoading && data && (
+          <>
+            <div className="flex-between">
+              <span className="text-sm-medium md:text-md-medium">Name</span>
+              <span className="text-md-bold md:text-md-bold">
+                {data.profile.name}
+              </span>
+            </div>
+            <div className="flex-between">
+              <span className="text-sm-medium md:text-md-medium">Email</span>
+              <span className="text-md-bold md:text-md-bold">
+                {data.profile.email}
+              </span>
+            </div>
+            <div className="flex-between">
+              <span className="text-sm-medium md:text-md-medium">
+                Nomor Handphone
+              </span>
+              <span className="text-md-bold md:text-md-bold">
+                {data.profile.phoneNumber ?? "-"}
+              </span>
+            </div>
+          </>
+        )}
         <hr className="w-full border border-neutral-300 my-4 md:my-8" />
 
         <h2 className="text-lg-bold md:display-xs-bold mb-4">Book List</h2>
@@ -105,7 +127,9 @@ const CheckoutList: React.FC = () => {
           <span className="text-sm-bold md:text-md-bold">Return Date</span>
           <p className="text-sm-medium md:text-md-medium">
             Please return the book no later than <br />
-            <span className="font-bold text-danger">31 August 2025</span>
+            <span className="font-bold text-danger">
+              {dayjs(returnDate).format("DD MMMM YYYY")}
+            </span>
           </p>
         </div>
 
@@ -121,7 +145,7 @@ const CheckoutList: React.FC = () => {
         </div>
 
         <Button className="w-full" onClick={goToCheckout}>
-          Confirm & Borrow
+          {loadingLoan ? "Loading..." : "Confirm & Borrow"}
         </Button>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import type { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,10 +10,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { logout } from "@/features/auth/authSlice";
 
 const Header: React.FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
   const items = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useDispatch();
+
+  function handleLogout() {
+    dispatch(logout());
+    window.location.href = "/home";
+  }
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/90 backdrop-blur-sm">
       <nav className="custom-container mx-auto flex h-16 md:h-20 items-center justify-between ">
@@ -87,7 +94,7 @@ const Header: React.FC = () => {
 
                   <DropdownMenuItem
                     className="text-danger"
-                    // onClick={handleLogout}
+                    onClick={handleLogout}
                   >
                     Logout
                   </DropdownMenuItem>
