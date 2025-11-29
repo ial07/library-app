@@ -32,7 +32,7 @@ const BorrowPage: React.FC = () => {
 
   const { data, isLoading, isError, error } = useMeLoans(status, page, 10);
   const { reviewMutation } = useReview();
-  const { putLoanMutation, errorMessage } = useLoan();
+  const { putLoanMutation } = useLoan();
 
   if (isError) return <span>{error.message}</span>;
 
@@ -49,8 +49,7 @@ const BorrowPage: React.FC = () => {
   // Give Review
   const handleSend = async (bookId: number) => {
     try {
-      // kirim review
-      const resReview = await reviewMutation.mutateAsync({
+      await reviewMutation.mutateAsync({
         bookId,
         star: rating,
         comment,
