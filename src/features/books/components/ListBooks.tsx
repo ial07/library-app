@@ -47,18 +47,24 @@ const ListBooks: React.FC<ListBooksProps> = ({
             <Skeleton key={i} className="h-100 w-full rounded-lg" />
           ))
         ) : allBooks.length > 0 ? (
-          allBooks.map((b) => (
-            <CardBook
-              key={b.id}
-              id={b.id}
-              image={b.coverImage}
-              label={b.title}
-              description={b.description}
-              rating={b.rating}
-            />
-          ))
+          allBooks.map((b) => {
+            const img =
+              b.coverImage && b.coverImage.startsWith("http")
+                ? b.coverImage
+                : "/images/no-pic.png";
+            return (
+              <CardBook
+                key={b.id}
+                id={b.id}
+                image={img}
+                label={b.title}
+                description={b.description}
+                rating={b.rating}
+              />
+            );
+          })
         ) : (
-          <div>No Products Yet</div>
+          <div>No Books yet</div>
         )}
       </div>
 

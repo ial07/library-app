@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { addToCart } from "@/features/cart/cartSlice";
 import { addCheckout } from "@/features/checkout/checkoutSlice";
 import { formatDate } from "@/lib/utils";
+import type { RootState } from "@/redux/store";
 import type { Author } from "@/types/Author";
 import type { CartItem } from "@/types/Cart";
 import type { Category } from "@/types/Category";
@@ -9,8 +10,9 @@ import type { Review } from "@/types/Review";
 import { Icon } from "@iconify/react";
 import { ChevronRight } from "lucide-react";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type DetailBookProps = {
   id?: string;
@@ -41,6 +43,7 @@ const DetailBook: React.FC<DetailBookProps> = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = useSelector((state: RootState) => state.auth.token);
 
   function goToCheckout() {
     if (!id) return;
@@ -57,6 +60,15 @@ const DetailBook: React.FC<DetailBookProps> = ({
 
     dispatch(addCheckout([item]));
     navigate("/checkout");
+  }
+
+  function checkAuth(action: () => void) {
+    if (!token) {
+      navigate("/auth?type=login");
+      toast.error("Please login your account first!");
+      return;
+    }
+    action();
   }
   return (
     <div className="relative">
@@ -130,21 +142,23 @@ const DetailBook: React.FC<DetailBookProps> = ({
               variant={"secondary"}
               className="w-50"
               onClick={() =>
-                dispatch(
-                  addToCart({
-                    id: id!,
-                    title: title!,
-                    Author: author!,
-                    coverImage: image!,
-                    Category: category!,
-                    quantity: 1,
-                  })
+                checkAuth(() =>
+                  dispatch(
+                    addToCart({
+                      id: id!,
+                      title: title!,
+                      Author: author!,
+                      coverImage: image!,
+                      Category: category!,
+                      quantity: 1,
+                    })
+                  )
                 )
               }
             >
               Add to Cart
             </Button>
-            <Button className="w-50" onClick={goToCheckout}>
+            <Button className="w-50" onClick={() => checkAuth(goToCheckout)}>
               Borrow Book
             </Button>
             <div className="size-10 rounded-full border border-neutral-300 md:inline flex-center">
@@ -197,10 +211,27 @@ const DetailBook: React.FC<DetailBookProps> = ({
           ))}
       </div>
       <div className="flex-start gap-3 fixed bottom-0 left-0 bg-white p-4 w-full md:hidden!">
-        <Button variant={"secondary"} className="flex-1">
+        <Button
+          variant={"secondary"}
+          className="flex-1"
+          onClick={() =>
+            checkAuth(() =>
+              dispatch(
+                addToCart({
+                  id: id!,
+                  title: title!,
+                  Author: author!,
+                  coverImage: image!,
+                  Category: category!,
+                  quantity: 1,
+                })
+              )
+            )
+          }
+        >
           Add to Cart
         </Button>
-        <Button className="flex-1" onClick={goToCheckout}>
+        <Button className="flex-1" onClick={() => checkAuth(goToCheckout)}>
           Borrow Book
         </Button>
         <div className="size-11 rounded-full border border-neutral-300 flex-center">

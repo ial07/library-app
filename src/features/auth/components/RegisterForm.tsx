@@ -4,6 +4,8 @@ import { type RegisterFormValues, registerSchema } from "../schema/authSchema";
 import { useAuth } from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 type Props = { onSwitch: () => void };
 
@@ -19,6 +21,10 @@ const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
   const onSubmit = (values: RegisterFormValues) => {
     registerMutation.mutate(values);
   };
+
+  useEffect(() => {
+    if (isError) toast.error(errorMessage);
+  }, [errorMessage]);
 
   return (
     <>
@@ -67,8 +73,6 @@ const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
           {...register("confirmPassword")}
           error={errors.confirmPassword?.message}
         />
-
-        {isError && <p className="text-sm text-red-500 mb-3">{errorMessage}</p>}
 
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Loading..." : "Daftar"}

@@ -13,6 +13,7 @@ import ScrollToTop from "./lib/ScrollToTop";
 import CheckoutPage from "./pages/Checkout/CheckoutPage";
 import SuccessAlertPage from "./pages/Alert/SuccessAlertPage";
 import SettingPage from "./pages/Settings/SettingPage";
+import PrivateRoute from "./routes/PrivateRoute";
 
 const App: React.FC = () => {
   return (
@@ -33,10 +34,38 @@ const App: React.FC = () => {
           <Route path="/details/:id" element={<DetailPage />} />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/bookbyauthor/:id" element={<BookByAuthorPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/success" element={<SuccessAlertPage returnDate="" />} />
-          <Route path="/settings" element={<SettingPage />} />
+          <Route
+            path="/cart"
+            element={
+              <PrivateRoute>
+                <CartPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <PrivateRoute>
+                <CheckoutPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/success"
+            element={
+              <PrivateRoute>
+                <SuccessAlertPage returnDate="" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <SettingPage />
+              </PrivateRoute>
+            }
+          />
         </Route>
 
         <Route path="*" element={<Navigate to="/" />} />

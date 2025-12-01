@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, XIcon } from "lucide-react";
 import { logout } from "@/features/auth/authSlice";
 
 const Header: React.FC = () => {
@@ -27,6 +27,7 @@ const Header: React.FC = () => {
         <Link to="/home" className="text-2xl font-bold tracking-tight">
           <img src="/icons/Logo.svg" alt="logo" className="h-10.5" />
         </Link>
+
         <div className="flex items-center gap-4">
           {!token ? (
             <div className="items-center gap-4 hidden md:flex">
@@ -93,7 +94,7 @@ const Header: React.FC = () => {
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
-                    className="text-danger"
+                    className="text-danger cursor-pointer"
                     onClick={handleLogout}
                   >
                     Logout
@@ -103,6 +104,26 @@ const Header: React.FC = () => {
             </>
           )}
         </div>
+        {!token && (
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="group">
+                <XIcon className="hidden group-data-[state=open]:inline cursor-pointer" />
+                <Menu className="inline group-data-[state=open]:hidden cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <div className="flex flex-col gap-4 w-100 p-4">
+                  <Button className="flex-1" variant={"secondary"} asChild>
+                    <Link to="/auth?type=login">Login</Link>
+                  </Button>
+                  <Button className="flex-1" asChild>
+                    <Link to="/auth?type=register">Register</Link>
+                  </Button>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
       </nav>
     </header>
   );

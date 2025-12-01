@@ -77,7 +77,7 @@ const CartList: React.FC = () => {
       </div>
     </div>
   ) : (
-    <div className="flex-center">Cart Is Empty</div>
+    <div className="flex-center h-screen">Cart Is Empty</div>
   );
 };
 
